@@ -1,0 +1,2086 @@
+Private Sub CommandButton1_Click()
+
+If IsNumeric(TextBox10.Value) And TextBox10.Value < 9 Then
+    For i = 3 To 8
+        Controls("ListBox" & i).Visible = False
+    Next
+    For i = 1 To TextBox10.Value
+        Controls("TextBox" & i + 1).Visible = True
+        Controls("TextBox" & i + 1).Left = 500 + 90 * i
+        
+        Controls("ToggleButton" & i).Visible = True
+        Controls("ToggleButton" & i).Left = 500 + 90 * i
+        
+        Controls("ListBox" & i + 1).Visible = True
+        Controls("ListBox" & i + 1).Left = 500 + 90 * i
+        Controls("ListBox" & i + 1).Height = 190
+    Next
+    Frame1.Width = 680 - 90 + 90 * TextBox10.Value
+    If TextBox10.Value < 5 Then
+        UserForm10.Width = 990
+        Else
+            UserForm10.Width = 730 - 90 + 90 * TextBox10.Value
+    End If
+    
+    CommandButton9.Enabled = True
+    CommandButton1.Enabled = False
+    TextBox10.Enabled = False
+    
+    Sheets("Variables programmation").Cells(1, 12) = "Conteneurs en cours"
+    Sheets("Archive commande").Cells(Sheets("Variables programmation").Cells(8, 2), 12) = "Conteneurs en cours"
+    
+    For i = 1 To TextBox10.Value
+        Sheets("Archive conteneur").Cells(Sheets("Archive conteneur").Cells(Rows.Count, 4).End(xlUp).Row + 1, 4) = Sheets("Archive commande").Cells(Sheets("Variables programmation").Cells(8, 2), 1) & "-" & i
+    Next
+    
+    
+    
+    
+End If
+
+End Sub
+
+Private Sub CommandButton2_Click()
+
+'UserForm1.ListBox1.Enabled = False
+'UserForm1.ComboBox1.Enabled = False
+'UserForm1.TextBox1.Enabled = False
+'UserForm1.CommandButton1.Enabled = False
+'UserForm1.CommandButton2.Enabled = False
+'UserForm1.CommandButton4.Enabled = False
+'UserForm1.CommandButton10.Enabled = False
+'UserForm1.CommandButton7.Enabled = False
+UserForm1.Show
+
+
+End Sub
+
+Private Sub CommandButton3_Click()
+
+UserForm4.Show
+
+End Sub
+
+Private Sub CommandButton4_Click()
+
+UserForm7.Show
+
+End Sub
+
+Private Sub CommandButton5_Click()
+
+
+longueur_exp_avant = Sheets("Informations expédition").Cells(Rows.Count, 8).End(xlUp).Row
+    
+b = 1
+For i = 1 To ListBox10.ListCount - 1
+    secu = 0
+    For t = 7 To longueur_exp_avant + b - 1
+        If Sheets("Informations expédition").Cells(t, 8) = ListBox10.List(i, 0) Then
+            Sheets("Informations expédition").Cells(t, 10) = Sheets("Informations expédition").Cells(t, 10) + ListBox10.List(i, 1)
+            Sheets("Informations expédition").Cells(t, 11) = Sheets("Informations expédition").Cells(t, 11) + ListBox10.List(i, 1)
+            secu = 1
+        End If
+    Next
+    If secu = 0 Then
+        secu2 = 0
+        Sheets("Informations expédition").Cells(longueur_exp_avant + b, 8) = ListBox10.List(i, 0)
+        Sheets("Informations expédition").Cells(longueur_exp_avant + b, 9) = 0
+        Sheets("Informations expédition").Cells(longueur_exp_avant + b, 10) = ListBox10.List(i, 1)
+        Sheets("Informations expédition").Cells(longueur_exp_avant + b, 11) = ListBox10.List(i, 1)
+        For t = 10 To Sheets("Variables programmation").Cells(1, 6)
+            If ListBox10.List(i, 0) = Sheets("Listes de prix").Cells(t, 3) Then
+                Sheets("Informations expédition").Cells(longueur_exp_avant + b, 12) = Sheets("Listes de prix").Cells(t, 4)
+                Sheets("Informations expédition").Cells(longueur_exp_avant + b, 13) = Sheets("Informations expédition").Cells(longueur_exp_avant + b, 11) * Sheets("Informations expédition").Cells(longueur_exp_avant + b, 12)
+                secu2 = 1
+            End If
+        Next
+        If secu2 = 0 Then
+            For t = 4 To Sheets("Variables programmation").Cells(1, 3) - 1
+                If ListBox10.List(i, 0) = Sheets("Variables programmation").Cells(t, 6) Then
+                    Sheets("Informations expédition").Cells(longueur_exp_avant + b, 12) = Sheets("Variables programmation").Cells(t, 9)
+                    Sheets("Informations expédition").Cells(longueur_exp_avant + b, 13) = Sheets("Informations expédition").Cells(longueur_exp_avant + b, 11) * Sheets("Informations expédition").Cells(longueur_exp_avant + b, 12)
+                End If
+            Next
+        End If
+        b = b + 1
+        
+    End If
+Next
+
+'If ListBox10.ListCount > 1 Then
+'
+'    indice_ajustement = Sheets("Variables programmation").Cells(Rows.Count, 20).End(xlUp).Row
+'
+'    UserForm4.ListBox2.AddItem ("----------------------------------------------------------------------------------------------")
+'    UserForm4.List(UserForm4.ListBox2.ListCount - 1, 1) = "-"
+'    UserForm4.List(UserForm4.ListBox2.ListCount - 1, 2) = "--------------------------------------"
+'
+'    Sheets("Variables programmation").Cells(indice_ajustement + 1, 20) = "----------------------------------------------------------------------------------------------"
+'    Sheets("Variables programmation").Cells(indice_ajustement + 1, 21) = "--------------------------------------"
+'    indice_ajustement = indice_ajustement + 1
+'
+'    UserForm4.ListBox2.AddItem ("Ajouts manuels")
+'
+'    Sheets("Variables programmation").Cells(indice_ajustement + 1, 20) = "Ajouts manuels"
+'    Sheets("Variables programmation").Cells(indice_ajustement + 1, 21) = ""
+'    indice_ajustement = indice_ajustement + 1
+'
+'    UserForm4.ListBox2.AddItem ("-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  ")
+'    UserForm4.ListBox2.List(UserForm4.ListBox2.ListCount - 1, 1) = "-"
+'    UserForm4.ListBox2.List(UserForm4.ListBox2.ListCount - 1, 2) = "-  -  -  -  -  -  -  -  -  -  -  -  "
+'
+'    Sheets("Variables programmation").Cells(indice_ajustement + 1, 20) = "-  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  -  "
+'    Sheets("Variables programmation").Cells(indice_ajustement + 1, 21) = "-  -  -  -  -  -  -  -  -  -  -  -  "
+'    indice_ajustement = indice_ajustement + 1
+'
+'
+'    For i = 1 To ListBox10.ListCount - 1
+'        UserForm4.ListBox2.AddItem (ListBox10.List(i, 0))
+'        UserForm4.ListBox2.List(UserForm4.ListBox2.ListCount - 1, 1) = "|"
+'        UserForm4.ListBox2.List(UserForm4.ListBox2.ListCount - 1, 2) = "            " & ListBox10.List(i, 2)
+'
+'        Sheets("Variables programmation").Cells(indice_ajustement + 1, 20) = ListBox10.List(i, 0)
+'        Sheets("Variables programmation").Cells(indice_ajustement + 1, 21) = ListBox10.List(i, 2)
+'        indice_ajustement = indice_ajustement + 1
+'
+'    Next
+'
+'End If
+
+ListBox10.Clear
+
+ListBox10.ColumnCount = 3
+ListBox10.AddItem ("Produit")
+ListBox10.List(0, 1) = "Quantité"
+
+ListBox10.ColumnWidths = "2cm;0,4cm;2cm"
+
+b = 0
+For i = 0 To Sheets("Informations expédition").Cells(Rows.Count, 8).End(xlUp).Row - 6
+ '   If Sheets("Informations expédition").Cells(8, 7 + i) <> "" Then
+        For t = 0 To 5
+            Sheets("Variables programmation").Cells(5 + i - b, 27 + t) = Sheets("Informations expédition").Cells(7 + i, 8 + t)
+        Next
+'        Else
+'            b = b + 1
+'    End If
+Next
+
+
+'-------------------------------------------------------------------------------------------------------------- filtre match
+
+b = 1
+For i = 0 To Sheets("Informations expédition").Cells(Rows.Count, 8).End(xlUp).Row - 7
+
+    If IsError(Application.Match(Sheets("Variables programmation").Cells(5 + i, 27), Sheets("Listes de prix").Range(Sheets("Listes de prix").Cells(10, 3), Sheets("Listes de prix").Cells(Sheets("Variables programmation").Cells(1, 6), 3)).Value, 0)) Then
+        If Sheets("Informations expédition").Cells(7 + i, 8) <> "" Then
+            Sheets("Variables programmation").Cells(5 + i, 33) = 1000 + b
+            b = b + 1
+            Else
+                Sheets("Variables programmation").Cells(5 + i, 33) = 2000 + b
+                b = b + 1
+        End If
+        Else
+            Sheets("Variables programmation").Cells(5 + i, 33) = Application.Match(Sheets("Variables programmation").Cells(5 + i, 27), Sheets("Listes de prix").Range(Sheets("Listes de prix").Cells(10, 3), Sheets("Listes de prix").Cells(Sheets("Variables programmation").Cells(1, 6), 3)).Value, 0)
+    End If
+Next
+
+
+'------------------------------------------------------------------------------------------------------
+
+
+Sheets("Informations expédition").Range("H7:M34").Value = ""
+
+X = Sheets("Variables programmation").Cells(Rows.Count, 27).End(xlUp).Row
+
+For i = 0 To Sheets("Variables programmation").Cells(Rows.Count, 27).End(xlUp).Row - 5
+    
+    For t = 0 To 5
+        Sheets("Informations expédition").Cells(7 + i, 8 + t) = Sheets("Variables programmation").Cells(Application.Match(Application.WorksheetFunction.Min(Sheets("Variables programmation").Range(Sheets("Variables programmation").Cells(1, 33), Sheets("Variables programmation").Cells(X, 33))), Sheets("Variables programmation").Range(Sheets("Variables programmation").Cells(1, 33), Sheets("Variables programmation").Cells(X, 33)).Value, 0), 27 + t)
+    Next
+ 
+    'MsgBox (Application.Match(Application.WorksheetFunction.Min(Sheets("Variables programmation").Range(Sheets("Variables programmation").Cells(1, 33), Sheets("Variables programmation").Cells(X, 33))), Sheets("Variables programmation").Range(Sheets("Variables programmation").Cells(1, 33), Sheets("Variables programmation").Cells(X, 33)), 0))
+    
+    Sheets("Variables programmation").Cells(Application.Match(Application.WorksheetFunction.Min(Sheets("Variables programmation").Range(Sheets("Variables programmation").Cells(1, 33), Sheets("Variables programmation").Cells(X, 33))), Sheets("Variables programmation").Range(Sheets("Variables programmation").Cells(1, 33), Sheets("Variables programmation").Cells(X, 33)), 0), 33) = ""
+    
+Next
+
+
+
+ListBox1.Clear
+
+ListBox1.ColumnCount = 3
+ListBox1.AddItem ("Produit")
+ListBox1.List(0, 1) = "|"
+ListBox1.List(0, 2) = "Quantité"
+
+ListBox1.ColumnWidths = "10,3cm;0,4cm;2cm"
+
+
+longueur_list1 = Sheets("Informations expédition").Cells(Rows.Count, 8).End(xlUp).Row
+
+For i = 7 To longueur_list1
+    If Sheets("Informations expédition").Cells(i, 8) <> "" Then
+        ListBox1.AddItem (Sheets("Informations expédition").Cells(i, 8))
+        ListBox1.List(ListBox1.ListCount - 1, 1) = "|"
+        ListBox1.List(ListBox1.ListCount - 1, 2) = Sheets("Informations expédition").Cells(i, 11)
+    End If
+Next
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+End Sub
+
+Private Sub CommandButton6_Click()
+
+For i = 12 To Sheets("Archive conteneur").Cells(Rows.Count, 4).End(xlUp).Row
+    If Sheets("Archive conteneur").Cells(i, 4) = Sheets("Archive commande").Cells(Sheets("Variables programmation").Cells(8, 2), 1) & "-" & Label14.Caption Then
+        
+        Sheets("Archive conteneur").Cells(i, 3) = Sheets("Archive commande").Cells(Sheets("Variables programmation").Cells(8, 2), 1)
+        Sheets("Archive conteneur").Cells(i, 2) = "À générer"
+        Sheets("Archive conteneur").Cells(i, 3) = Sheets("Archive commande").Cells(Sheets("Variables programmation").Cells(8, 2), 3)
+        Sheets("Archive conteneur").Cells(i, 5) = Label21.Caption
+        Sheets("Archive conteneur").Cells(i, 6) = Label32.Caption
+        
+        info = TextBox11.Value
+        
+        For t = 12 To 16
+            info = info & ";" & Controls("TextBox" & t).Value
+        Next
+        
+        Sheets("Archive conteneur").Cells(i, 8) = info
+        
+        emballage = ""
+        For t = 1 To ListBox11.ListCount - 1
+            emballage = emballage & ListBox11.List(t, 0) & ";"
+            emballage = emballage & ListBox12.List(t, 0) & ";"
+            emballage = emballage & ListBox13.List(t, 0) & ";"
+            emballage = emballage & ListBox14.List(t, 0) & ";"
+        Next
+        
+        Sheets("Archive conteneur").Cells(i, 9) = emballage
+        
+        fin_conteneur = 20
+        While Sheets("Archive conteneur").Cells(10, fin_conteneur) <> ""
+            fin_conteneur = fin_conteneur + 1
+        Wend
+        
+        For t = 1 To ListBox11.ListCount - 1
+            For k = 20 To fin_conteneur
+                If Sheets("Archive conteneur").Cells(10, k) = ListBox11.List(t, 0) Then
+                    If Sheets("Archive conteneur").Cells(11, k) = "Quantité" Then
+                        Sheets("Archive conteneur").Cells(i, k) = ListBox11.List(t, 2)
+                        Else
+                            Sheets("Archive conteneur").Cells(i, k) = ListBox11.List(t, 6)          ' rendu ici
+                    End If
+                End If
+            Next
+        Next
+        
+        
+    End If
+Next
+
+
+End Sub
+
+Private Sub CommandButton9_Click()
+
+For i = 12 To Sheets("Archive conteneur").Cells(Rows.Count, 1).End(xlUp).Row
+    For t = 1 To TextBox10.Value
+        If Sheets("Archive conteneur").Cells(i, 4) = Sheets("Archive commande").Cells(Sheets("Variables programmation").Cells(8, 2), 1) & "-" & t Then
+            Sheets("Archive conteneur").Range(Sheets("Archive conteneur").Cells(i, 1), Sheets("Archive conteneur").Cells(i, 300)) = ""
+        End If
+    Next
+Next
+
+CommandButton9.Enabled = False
+CommandButton1.Enabled = True
+
+End Sub
+
+Private Sub Frame1_Click()
+
+End Sub
+
+Private Sub Frame2_Click()
+
+End Sub
+
+Private Sub Frame3_Click()
+
+End Sub
+
+Private Sub Label14_Click()
+
+End Sub
+
+Private Sub Label2_Click()
+
+End Sub
+
+Private Sub Label29_Click()
+
+End Sub
+
+Private Sub Label31_Click()
+
+End Sub
+
+Private Sub ListBox1_Click()
+
+'X = Sheets("Variables programmation").Cells(1, 19)
+If ListBox1.ListIndex > 0 Then
+    For i = 2 To 9
+        Controls("ListBox" & i).ListIndex = ListBox1.ListIndex
+        Controls("TextBox" & i).Value = Controls("ListBox" & i).List(ListBox2.ListIndex, 0)
+    Next
+End If
+
+
+'Sheets("Variables programmation").Cells(1, 19) = X
+
+'TextBox9.BackColor = &HFFFFFF
+'Controls("TextBox" & Sheets("Variables programmation").Cells(1, 19)).BackColor = &HC0FFC0
+'Controls("TextBox" & Sheets("Variables programmation").Cells(1, 19)).SetFocus
+
+End Sub
+
+Private Sub ListBox11_Click()
+
+If ListBox11.ListIndex > 0 Then
+    For i = 12 To 14
+        Controls("ListBox" & i).ListIndex = ListBox11.ListIndex
+        'Controls("TextBox" & i + 5).Value = Controls("ListBox" & i).List(ListBox11.ListIndex, 0)
+    Next
+End If
+
+
+
+End Sub
+
+Private Sub ListBox11_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+'If ListBox11.ListIndex > 0 Then
+'
+'
+'    If KeyCode = vbKey1 Then
+'            ListBox12.List(ListBox11.ListIndex, 0) = "Sac"
+'            KeyCode = 0
+'    End If
+'
+'    If KeyCode = vbKey2 Then
+'            ListBox12.List(ListBox11.ListIndex, 0) = "Palette"
+'            KeyCode = 0
+'    End If
+'
+'    If KeyCode = vbKey3 Then
+'            ListBox12.List(ListBox11.ListIndex, 0) = "Seul"
+'            KeyCode = 0
+'    End If
+'
+'End If
+
+
+
+
+End Sub
+
+Private Sub ListBox12_Click()
+
+If ListBox12.ListIndex > 0 Then
+    For i = 12 To 14
+        Controls("ListBox" & i).ListIndex = ListBox12.ListIndex
+        ListBox11.ListIndex = ListBox12.ListIndex
+        Controls("TextBox" & i + 5).Value = Controls("ListBox" & i).List(ListBox11.ListIndex, 0)
+    Next
+End If
+
+
+End Sub
+
+Private Sub ListBox13_Click()
+
+If ListBox13.ListIndex > 0 Then
+    For i = 12 To 14
+        Controls("ListBox" & i).ListIndex = ListBox13.ListIndex
+        ListBox11.ListIndex = ListBox13.ListIndex
+        Controls("TextBox" & i + 5).Value = Controls("ListBox" & i).List(ListBox11.ListIndex, 0)
+    Next
+End If
+
+
+End Sub
+
+Private Sub ListBox14_Click()
+
+If ListBox14.ListIndex > 0 Then
+    For i = 12 To 14
+        Controls("ListBox" & i).ListIndex = ListBox14.ListIndex
+        ListBox11.ListIndex = ListBox14.ListIndex
+        Controls("TextBox" & i + 5).Value = Controls("ListBox" & i).List(ListBox11.ListIndex, 0)
+    Next
+End If
+
+
+End Sub
+
+Private Sub ListBox2_Click()
+
+'For i = 2 To 9
+'    Controls("TextBox" & i).BackColor = &HFFFFFF
+'Next
+'
+'TextBox2.BackColor = &HC0FFC0
+'TextBox2.SetFocus
+'Sheets("Variables programmation").Cells(1, 19) = 2
+
+If ListBox2.ListIndex > 0 Then
+    For i = 2 To 9
+        Controls("ListBox" & i).ListIndex = ListBox2.ListIndex
+        Controls("TextBox" & i).Value = Controls("ListBox" & i).List(ListBox2.ListIndex, 0)
+    Next
+End If
+
+
+If TextBox2.Visible = True And ListBox2.Enabled = True Then
+    TextBox2.SetFocus
+End If
+
+
+End Sub
+
+Private Sub ListBox2_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+
+
+
+
+'Label3.Height = 16
+'Label3.Width = 16
+'Label3.BackColor = &H80FF80
+'Label3.BorderStyle = 1
+
+
+
+End Sub
+
+Private Sub ListBox3_Click()
+
+'For i = 2 To 9
+'    Controls("TextBox" & i).BackColor = &HFFFFFF
+'Next
+'
+'TextBox3.BackColor = &HC0FFC0
+'Sheets("Variables programmation").Cells(1, 19) = 3
+
+
+If ListBox3.ListIndex > 0 Then
+    For i = 2 To 9
+        Controls("ListBox" & i).ListIndex = ListBox3.ListIndex
+        Controls("TextBox" & i).Value = Controls("ListBox" & i).List(ListBox2.ListIndex, 0)
+    Next
+End If
+
+If TextBox3.Visible = True And ListBox3.Enabled = True Then
+    TextBox3.SetFocus
+End If
+
+End Sub
+
+Private Sub ListBox3_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+
+
+
+
+
+End Sub
+
+Private Sub ListBox4_Click()
+
+'For i = 2 To 9
+'    Controls("TextBox" & i).BackColor = &HFFFFFF
+'Next
+'
+'TextBox4.BackColor = &HC0FFC0
+'Sheets("Variables programmation").Cells(1, 19) = 4
+
+If ListBox4.ListIndex > 0 Then
+    For i = 2 To 9
+        Controls("ListBox" & i).ListIndex = ListBox4.ListIndex
+        Controls("TextBox" & i).Value = Controls("ListBox" & i).List(ListBox2.ListIndex, 0)
+    Next
+End If
+    
+If TextBox4.Visible = True And ListBox4.Enabled = True Then
+    TextBox4.SetFocus
+End If
+
+End Sub
+
+Private Sub ListBox4_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+
+
+
+
+End Sub
+
+Private Sub ListBox5_Click()
+'
+'For i = 2 To 9
+'    Controls("TextBox" & i).BackColor = &HFFFFFF
+'Next
+'
+'TextBox5.BackColor = &HC0FFC0
+'Sheets("Variables programmation").Cells(1, 19) = 5
+'
+
+If ListBox5.ListIndex > 0 Then
+    For i = 2 To 9
+        Controls("ListBox" & i).ListIndex = ListBox5.ListIndex
+        Controls("TextBox" & i).Value = Controls("ListBox" & i).List(ListBox2.ListIndex, 0)
+    Next
+End If
+
+
+If TextBox5.Visible = True And ListBox5.Enabled = True Then
+    TextBox5.SetFocus
+End If
+
+End Sub
+
+Private Sub ListBox5_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+
+
+
+
+End Sub
+
+Private Sub ListBox6_Click()
+
+'For i = 2 To 9
+'    Controls("TextBox" & i).BackColor = &HFFFFFF
+'Next
+'
+'TextBox6.BackColor = &HC0FFC0
+'Sheets("Variables programmation").Cells(1, 19) = 6
+
+
+If ListBox6.ListIndex > 0 Then
+    For i = 2 To 9
+        Controls("ListBox" & i).ListIndex = ListBox6.ListIndex
+        Controls("TextBox" & i).Value = Controls("ListBox" & i).List(ListBox2.ListIndex, 0)
+    Next
+End If
+    
+If TextBox6.Visible = True And ListBox6.Enabled = True Then
+    TextBox6.SetFocus
+End If
+End Sub
+
+Private Sub ListBox6_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+
+ListBox11.Clear
+ListBox11.ColumnCount = 3
+ListBox11.AddItem ("Produit")
+ListBox11.List(0, 1) = "|"
+ListBox11.List(0, 2) = "Quantité"
+
+ListBox11.ColumnWidths = "10,3cm;0,4cm;2cm"
+
+ListBox12.Clear
+ListBox12.AddItem ("Type")
+
+
+
+Label14.Caption = 5
+
+
+
+For i = 1 To ListBox6.ListCount - 1
+    If ListBox6.List(i, 0) <> "" Then
+        ListBox11.AddItem (ListBox1.List(i, 0))
+        ListBox12.AddItem ("")
+        ListBox11.List(ListBox11.ListCount - 1, 1) = "|"
+        ListBox11.List(ListBox11.ListCount - 1, 2) = ListBox6.List(i, 0)
+        
+    End If
+Next
+
+
+End Sub
+
+Private Sub ListBox7_Click()
+
+'For i = 2 To 9
+'    Controls("TextBox" & i).BackColor = &HFFFFFF
+'Next
+'
+'TextBox7.BackColor = &HC0FFC0
+'Sheets("Variables programmation").Cells(1, 19) = 7
+
+If ListBox7.ListIndex > 0 Then
+    For i = 2 To 9
+        Controls("ListBox" & i).ListIndex = ListBox7.ListIndex
+        Controls("TextBox" & i).Value = Controls("ListBox" & i).List(ListBox2.ListIndex, 0)
+    Next
+End If
+    
+If TextBox7.Visible = True And ListBox7.Enabled = True Then
+    TextBox7.SetFocus
+End If
+
+
+End Sub
+
+Private Sub ListBox7_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+
+
+
+
+End Sub
+
+Private Sub ListBox8_Click()
+
+'For i = 2 To 9
+'    Controls("textBox" & i).BackColor = &HFFFFFF
+'Next
+'
+'TextBox8.BackColor = &HC0FFC0
+'Sheets("Variables programmation").Cells(1, 19) = 8
+
+
+If ListBox8.ListIndex > 0 Then
+    For i = 2 To 9
+        Controls("ListBox" & i).ListIndex = ListBox8.ListIndex
+        Controls("TextBox" & i).Value = Controls("ListBox" & i).List(ListBox2.ListIndex, 0)
+    Next
+End If
+
+If TextBox8.Visible = True And ListBox8.Enabled = True Then
+    TextBox8.SetFocus
+End If
+End Sub
+
+Private Sub ListBox8_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+
+
+
+
+End Sub
+
+Private Sub ListBox9_Click()
+
+'For i = 2 To 9
+'    Controls("TextBox" & i).BackColor = &HFFFFFF
+'Next
+'
+'TextBox9.BackColor = &HC0FFC0
+'Sheets("Variables programmation").Cells(1, 19) = 9
+
+If ListBox9.ListIndex > 0 Then
+    For i = 1 To 9
+        Controls("ListBox" & i).ListIndex = ListBox9.ListIndex
+        Controls("TextBox" & i).Value = Controls("ListBox" & i).List(ListBox2.ListIndex, 0)
+    Next
+End If
+
+
+If TextBox9.Visible = True And ListBox9.Enabled = True Then
+    TextBox9.SetFocus
+End If
+
+End Sub
+
+Private Sub ListBox9_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+
+
+
+
+End Sub
+
+Private Sub TextBox1_Change()
+
+End Sub
+
+Private Sub TextBox15_Change()
+
+End Sub
+
+Private Sub TextBox17_Change()
+
+'ListBox12.List(ListBox12.ListIndex, 0) = TextBox17.Value
+'
+'
+'
+'If IsNumeric(TextBox17.Value) Or TextBox17.Value = "" Then
+'
+'    somme = 0
+'    For i = 12 To 14
+'        If Controls("ListBox" & i).List(ListBox11.ListIndex, 0) <> "" Then
+'            somme = somme + Controls("ListBox" & i).List(ListBox11.ListIndex, 0)
+'        End If
+'    Next
+'    ListBox11.List(ListBox11.ListIndex, 4) = ListBox11.List(ListBox11.ListIndex, 2) - somme
+'
+'End If
+
+
+End Sub
+
+Private Sub TextBox17_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+If KeyCode = vbKeyReturn Then
+        
+        ListBox12.List(ListBox12.ListIndex, 0) = TextBox17.Value
+
+
+
+        If IsNumeric(TextBox17.Value) Or TextBox17.Value = "" Then
+        
+            somme = 0
+            For i = 12 To 14
+                If Controls("ListBox" & i).List(ListBox11.ListIndex, 0) <> "" Then
+                    somme = somme + Controls("ListBox" & i).List(ListBox11.ListIndex, 0)
+                End If
+            Next
+            ListBox11.List(ListBox11.ListIndex, 4) = ListBox11.List(ListBox11.ListIndex, 2) - somme
+            
+        End If
+        
+        If ListBox11.ListIndex < ListBox11.ListCount - 1 Then
+            ListBox11.ListIndex = ListBox11.ListIndex + 1
+            Else
+                ListBox11.ListIndex = 1
+        End If
+        
+        
+        
+        KeyCode = 0
+        Me.TextBox17.SetFocus
+End If
+
+
+
+End Sub
+
+Private Sub TextBox18_Change()
+
+'ListBox13.List(ListBox13.ListIndex, 0) = TextBox18.Value
+'
+'
+'
+'If IsNumeric(TextBox18.Value) Or TextBox18.Value = "" Then
+'
+'    somme = 0
+'    For i = 12 To 14
+'        If Controls("ListBox" & i).List(ListBox11.ListIndex, 0) <> "" Then
+'            somme = somme + Controls("ListBox" & i).List(ListBox11.ListIndex, 0)
+'        End If
+'    Next
+'    ListBox11.List(ListBox11.ListIndex, 4) = ListBox11.List(ListBox11.ListIndex, 2) - somme
+'
+'End If
+
+
+End Sub
+
+Private Sub TextBox18_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+If KeyCode = vbKeyReturn Then
+        
+        ListBox13.List(ListBox13.ListIndex, 0) = TextBox18.Value
+
+
+
+        If IsNumeric(TextBox18.Value) Or TextBox18.Value = "" Then
+        
+            somme = 0
+            For i = 12 To 14
+                If Controls("ListBox" & i).List(ListBox11.ListIndex, 0) <> "" Then
+                    somme = somme + Controls("ListBox" & i).List(ListBox11.ListIndex, 0)
+                End If
+            Next
+            ListBox11.List(ListBox11.ListIndex, 4) = ListBox11.List(ListBox11.ListIndex, 2) - somme
+            
+        End If
+        
+        If ListBox11.ListIndex < ListBox11.ListCount - 1 Then
+            ListBox11.ListIndex = ListBox11.ListIndex + 1
+            Else
+                ListBox11.ListIndex = 1
+        End If
+        
+        
+        
+        KeyCode = 0
+        Me.TextBox18.SetFocus
+End If
+
+
+
+End Sub
+
+Private Sub TextBox19_Change()
+
+'ListBox14.List(ListBox14.ListIndex, 0) = TextBox19.Value
+'
+'
+'
+'If IsNumeric(TextBox19.Value) Or TextBox19.Value = "" Then
+'
+'    somme = 0
+'    For i = 12 To 14
+'        If Controls("ListBox" & i).List(ListBox11.ListIndex, 0) <> "" Then
+'            somme = somme + Controls("ListBox" & i).List(ListBox11.ListIndex, 0)
+'        End If
+'    Next
+'    ListBox11.List(ListBox11.ListIndex, 4) = ListBox11.List(ListBox11.ListIndex, 2) - somme
+'
+'End If
+
+
+End Sub
+
+Private Sub TextBox19_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+If KeyCode = vbKeyReturn Then
+        
+        ListBox14.List(ListBox14.ListIndex, 0) = TextBox19.Value
+
+
+
+        If IsNumeric(TextBox19.Value) Or TextBox19.Value = "" Then
+        
+            somme = 0
+            For i = 12 To 14
+                If Controls("ListBox" & i).List(ListBox11.ListIndex, 0) <> "" Then
+                    somme = somme + Controls("ListBox" & i).List(ListBox11.ListIndex, 0)
+                End If
+            Next
+            ListBox11.List(ListBox11.ListIndex, 4) = ListBox11.List(ListBox11.ListIndex, 2) - somme
+            
+        End If
+        
+        If ListBox11.ListIndex < ListBox11.ListCount - 1 Then
+            ListBox11.ListIndex = ListBox11.ListIndex + 1
+            Else
+                ListBox11.ListIndex = 1
+        End If
+        
+        
+        
+        KeyCode = 0
+        Me.TextBox19.SetFocus
+End If
+
+
+End Sub
+
+Private Sub TextBox2_Change()
+
+'ListBox2.List(ListBox2.ListIndex, 0) = TextBox2.Value
+'
+'
+'
+'If IsNumeric(TextBox2.Value) Or TextBox2.Value = "" Then
+'
+'    somme = 0
+'    For i = 2 To 9
+'        If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+'            somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+'        End If
+'    Next
+'    ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+'
+'End If
+
+
+
+End Sub
+
+Private Sub TextBox2_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+If KeyCode = vbKeyReturn Then
+        
+        ListBox2.List(ListBox2.ListIndex, 0) = TextBox2.Value
+
+
+
+        If IsNumeric(TextBox2.Value) Or TextBox2.Value = "" Then
+        
+            somme = 0
+            For i = 2 To 9
+                If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+                    somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+                End If
+            Next
+            ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+            
+        End If
+                
+        If ListBox1.ListIndex < ListBox1.ListCount - 1 Then
+            ListBox1.ListIndex = ListBox1.ListIndex + 1
+            Else
+                ListBox1.ListIndex = 1
+        End If
+        
+        KeyCode = 0
+        Me.TextBox2.SetFocus
+End If
+
+
+End Sub
+
+Private Sub TextBox3_Change()
+
+'ListBox3.List(ListBox3.ListIndex, 0) = TextBox3.Value
+'
+'
+'
+'If IsNumeric(TextBox3.Value) Or TextBox3.Value = "" Then
+'
+'    somme = 0
+'    For i = 2 To 9
+'        If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+'            somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+'        End If
+'    Next
+'    ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+'
+'End If
+
+
+
+End Sub
+
+Private Sub TextBox3_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+If KeyCode = vbKeyReturn Then
+        
+        ListBox3.List(ListBox3.ListIndex, 0) = TextBox3.Value
+
+
+
+        If IsNumeric(TextBox3.Value) Or TextBox3.Value = "" Then
+        
+            somme = 0
+            For i = 2 To 9
+                If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+                    somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+                End If
+            Next
+            ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+            
+        End If
+                
+        If ListBox1.ListIndex < ListBox1.ListCount - 1 Then
+            ListBox1.ListIndex = ListBox1.ListIndex + 1
+            Else
+                ListBox1.ListIndex = 1
+        End If
+        
+        KeyCode = 0
+        Me.TextBox3.SetFocus
+End If
+
+End Sub
+
+Private Sub TextBox4_Change()
+
+'ListBox4.List(ListBox4.ListIndex, 0) = TextBox4.Value
+'
+'
+'
+'If IsNumeric(TextBox4.Value) Or TextBox4.Value = "" Then
+'
+'    somme = 0
+'    For i = 2 To 9
+'        If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+'            somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+'        End If
+'    Next
+'    ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+'
+'End If
+
+
+End Sub
+
+Private Sub TextBox4_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+If KeyCode = vbKeyReturn Then
+        
+        ListBox4.List(ListBox4.ListIndex, 0) = TextBox4.Value
+
+
+
+        If IsNumeric(TextBox4.Value) Or TextBox4.Value = "" Then
+        
+            somme = 0
+            For i = 2 To 9
+                If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+                    somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+                End If
+            Next
+            ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+            
+        End If
+                
+        If ListBox1.ListIndex < ListBox1.ListCount - 1 Then
+            ListBox1.ListIndex = ListBox1.ListIndex + 1
+            Else
+                ListBox1.ListIndex = 1
+        End If
+        
+        KeyCode = 0
+        Me.TextBox4.SetFocus
+End If
+
+
+End Sub
+
+Private Sub TextBox5_Change()
+
+'ListBox5.List(ListBox5.ListIndex, 0) = TextBox5.Value
+'
+'
+'
+'If IsNumeric(TextBox5.Value) Or TextBox5.Value = "" Then
+'
+'    somme = 0
+'    For i = 2 To 9
+'        If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+'            somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+'        End If
+'    Next
+'    ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+'
+'End If
+
+End Sub
+
+Private Sub TextBox5_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+If KeyCode = vbKeyReturn Then
+        
+        ListBox5.List(ListBox5.ListIndex, 0) = TextBox5.Value
+
+
+
+        If IsNumeric(TextBox5.Value) Or TextBox5.Value = "" Then
+        
+            somme = 0
+            For i = 2 To 9
+                If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+                    somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+                End If
+            Next
+            ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+            
+        End If
+                
+        If ListBox1.ListIndex < ListBox1.ListCount - 1 Then
+            ListBox1.ListIndex = ListBox1.ListIndex + 1
+            Else
+                ListBox1.ListIndex = 1
+        End If
+        
+        KeyCode = 0
+        Me.TextBox5.SetFocus
+End If
+
+
+End Sub
+
+Private Sub TextBox6_Change()
+
+'ListBox6.List(ListBox6.ListIndex, 0) = TextBox6.Value
+'
+'
+'
+'If IsNumeric(TextBox6.Value) Or TextBox6.Value = "" Then
+'
+'    somme = 0
+'    For i = 2 To 9
+'        If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+'            somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+'        End If
+'    Next
+'    ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+'
+'End If
+
+End Sub
+
+Private Sub TextBox6_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+If KeyCode = vbKeyReturn Then
+        
+        ListBox6.List(ListBox6.ListIndex, 0) = TextBox6.Value
+
+
+
+        If IsNumeric(TextBox6.Value) Or TextBox6.Value = "" Then
+        
+            somme = 0
+            For i = 2 To 9
+                If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+                    somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+                End If
+            Next
+            ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+            
+        End If
+                
+        If ListBox1.ListIndex < ListBox1.ListCount - 1 Then
+            ListBox1.ListIndex = ListBox1.ListIndex + 1
+            Else
+                ListBox1.ListIndex = 1
+        End If
+        
+        KeyCode = 0
+        Me.TextBox6.SetFocus
+End If
+
+End Sub
+
+Private Sub TextBox7_Change()
+
+'ListBox7.List(ListBox7.ListIndex, 0) = TextBox7.Value
+'
+'
+'
+'If IsNumeric(TextBox7.Value) Or TextBox7.Value = "" Then
+'
+'    somme = 0
+'    For i = 2 To 9
+'        If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+'            somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+'        End If
+'    Next
+'    ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+'
+'End If
+
+End Sub
+
+Private Sub TextBox7_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+If KeyCode = vbKeyReturn Then
+        
+        ListBox7.List(ListBox7.ListIndex, 0) = TextBox7.Value
+
+
+
+        If IsNumeric(TextBox7.Value) Or TextBox7.Value = "" Then
+        
+            somme = 0
+            For i = 2 To 9
+                If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+                    somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+                End If
+            Next
+            ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+            
+        End If
+                
+        If ListBox1.ListIndex < ListBox1.ListCount - 1 Then
+            ListBox1.ListIndex = ListBox1.ListIndex + 1
+            Else
+                ListBox1.ListIndex = 1
+        End If
+        
+        KeyCode = 0
+        Me.TextBox7.SetFocus
+End If
+
+End Sub
+
+Private Sub TextBox8_Change()
+
+'ListBox8.List(ListBox8.ListIndex, 0) = TextBox8.Value
+'
+'
+'
+'If IsNumeric(TextBox8.Value) Or TextBox8.Value = "" Then
+'
+'    somme = 0
+'    For i = 2 To 9
+'        If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+'            somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+'        End If
+'    Next
+'    ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+'
+'End If
+
+End Sub
+
+Private Sub TextBox8_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+If KeyCode = vbKeyReturn Then
+        
+        ListBox8.List(ListBox8.ListIndex, 0) = TextBox8.Value
+
+
+
+        If IsNumeric(TextBox8.Value) Or TextBox8.Value = "" Then
+        
+            somme = 0
+            For i = 2 To 9
+                If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+                    somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+                End If
+            Next
+            ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+            
+        End If
+                
+        If ListBox1.ListIndex < ListBox1.ListCount - 1 Then
+            ListBox1.ListIndex = ListBox1.ListIndex + 1
+            Else
+                ListBox1.ListIndex = 1
+        End If
+        
+        KeyCode = 0
+        Me.TextBox8.SetFocus
+End If
+
+End Sub
+
+Private Sub TextBox9_Change()
+
+'ListBox9.List(ListBox9.ListIndex, 0) = TextBox9.Value
+'
+'
+'
+'If IsNumeric(TextBox9.Value) Or TextBox9.Value = "" Then
+'
+'    somme = 0
+'    For i = 2 To 9
+'        If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+'            somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+'        End If
+'    Next
+'    ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+'
+'End If
+
+End Sub
+
+Private Sub TextBox9_KeyDown(ByVal KeyCode As MSForms.ReturnInteger, ByVal Shift As Integer)
+
+If KeyCode = vbKeyReturn Then
+        
+        ListBox9.List(ListBox9.ListIndex, 0) = TextBox9.Value
+
+
+
+        If IsNumeric(TextBox9.Value) Or TextBox9.Value = "" Then
+        
+            somme = 0
+            For i = 2 To 9
+                If Controls("ListBox" & i).List(ListBox1.ListIndex, 0) <> "" Then
+                    somme = somme + Controls("ListBox" & i).List(ListBox1.ListIndex, 0)
+                End If
+            Next
+            ListBox1.List(ListBox1.ListIndex, 6) = ListBox1.List(ListBox1.ListIndex, 2) - somme
+            
+        End If
+                
+        If ListBox1.ListIndex < ListBox1.ListCount - 1 Then
+            ListBox1.ListIndex = ListBox1.ListIndex + 1
+            Else
+                ListBox1.ListIndex = 1
+        End If
+        
+        KeyCode = 0
+        Me.TextBox9.SetFocus
+End If
+
+End Sub
+
+Private Sub ToggleButton1_Click()
+
+ListBox2.Height = 200
+
+If ToggleButton1.Value = False Then
+    ListBox2.Enabled = True
+    TextBox2.Enabled = True
+    ListBox2.BackColor = &H80000005
+    TextBox2.BackColor = &H80000005
+    ListBox1.Enabled = True
+    Frame2.Enabled = False
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = True
+        Controls("TextBox" & i).Enabled = True
+        Controls("ToggleButton" & i - 1).Enabled = True
+    Next
+
+End If
+
+
+If ToggleButton1.Value = True Then
+    
+    ListBox11.Clear
+    
+    ListBox11.Height = 170
+    ListBox11.ColumnCount = 7
+    ListBox11.AddItem ("Produit")
+    ListBox11.List(0, 1) = "|"
+    ListBox11.List(0, 2) = "Quantité"
+    ListBox11.List(0, 3) = "|"
+    ListBox11.List(0, 4) = "Quantité"
+    ListBox11.List(0, 5) = "|"
+    ListBox11.List(0, 6) = "Volume"
+    
+    ListBox11.ColumnWidths = "10,3cm;0,4cm;2cm;0,4cm;2cm;0,4cm;2cm"
+    
+    ListBox12.Clear                                                                    'x
+    ListBox12.AddItem ("Sac")                                                           'x
+    ListBox13.Clear                                                                    'x
+    ListBox13.AddItem ("Palette")                                                       'x
+    ListBox14.Clear                                                                    'x
+    ListBox14.AddItem ("Seul")                                                          'x
+    
+    
+    
+    Label14.Caption = 1
+    Label23.Caption = 1
+    
+    
+    
+    For i = 1 To ListBox2.ListCount - 1
+        If ListBox2.List(i, 0) <> "" Then
+            ListBox11.AddItem (ListBox1.List(i, 0))
+            
+            ListBox12.AddItem ("")                                          'x
+            ListBox13.AddItem ("")                                          'x
+            ListBox14.AddItem ("")                                          'x
+            
+            ListBox11.List(ListBox11.ListCount - 1, 1) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 2) = ListBox2.List(i, 0)
+            
+            ListBox11.List(ListBox11.ListCount - 1, 3) = "|"                                'x
+            ListBox11.List(ListBox11.ListCount - 1, 4) = ListBox2.List(i, 0)                'x
+            
+            ListBox11.List(ListBox11.ListCount - 1, 5) = "|"                                'x
+            ListBox11.List(ListBox11.ListCount - 1, 6) = ListBox2.List(i, 1)                'x
+            
+        End If
+    Next
+
+    
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = False
+        Controls("TextBox" & i).Enabled = False
+        If i <> 2 Then
+            Controls("ToggleButton" & i - 1).Enabled = False
+        End If
+    Next
+
+    ListBox1.Enabled = False
+    ListBox2.BackColor = &HC0C0C0
+    TextBox2.BackColor = &HC0C0C0
+    
+    Frame2.Enabled = True
+    
+    
+End If
+
+
+End Sub
+
+Private Sub ToggleButton2_Click()
+
+ListBox3.Height = 200
+
+If ToggleButton2.Value = False Then
+    ListBox3.Enabled = True
+    TextBox3.Enabled = True
+    ListBox3.BackColor = &H80000005
+    TextBox3.BackColor = &H80000005
+    ListBox1.Enabled = True
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = True
+        Controls("TextBox" & i).Enabled = True
+        Controls("ToggleButton" & i - 1).Enabled = True
+    Next
+    Frame2.Enabled = False
+End If
+
+
+If ToggleButton2.Value = True Then
+
+    ListBox11.Clear
+    ListBox11.ColumnCount = 7
+    ListBox11.AddItem ("Produit")
+    ListBox11.List(0, 1) = "|"
+    ListBox11.List(0, 2) = "Quantité"
+    ListBox11.List(0, 3) = "|"
+    ListBox11.List(0, 4) = "Quantité"
+    ListBox11.List(0, 5) = "|"
+    ListBox11.List(0, 6) = "Volume"
+    
+    ListBox11.ColumnWidths = "10,3cm;0,4cm;2cm;0,4cm;2cm;0,4cm;2cm"
+    
+    ListBox12.Clear
+    ListBox12.AddItem ("Type")
+    
+    
+    
+    Label14.Caption = 2
+    Label23.Caption = 2
+    
+    
+    
+    For i = 1 To ListBox3.ListCount - 1
+        If ListBox3.List(i, 0) <> "" Then
+            ListBox11.AddItem (ListBox1.List(i, 0))
+            ListBox12.AddItem ("")
+            ListBox11.List(ListBox11.ListCount - 1, 1) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 2) = ListBox3.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 3) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 4) = ListBox3.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 5) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 6) = ListBox3.List(i, 1)
+            
+        End If
+    Next
+
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = False
+        Controls("TextBox" & i).Enabled = False
+        If i <> 3 Then
+            Controls("ToggleButton" & i - 1).Enabled = False
+        End If
+    Next
+
+
+    ListBox1.Enabled = False
+    ListBox3.BackColor = &HC0C0C0
+    TextBox3.BackColor = &HC0C0C0
+    Frame2.Enabled = True
+End If
+
+
+End Sub
+
+Private Sub ToggleButton3_Click()
+
+ListBox4.Height = 200
+
+If ToggleButton3.Value = False Then
+    ListBox4.Enabled = True
+    TextBox4.Enabled = True
+    ListBox4.BackColor = &H80000005
+    TextBox4.BackColor = &H80000005
+    ListBox1.Enabled = True
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = True
+        Controls("TextBox" & i).Enabled = True
+        Controls("ToggleButton" & i - 1).Enabled = True
+    Next
+    Frame2.Enabled = False
+End If
+
+
+If ToggleButton3.Value = True Then
+
+    ListBox11.Clear
+    ListBox11.ColumnCount = 7
+    ListBox11.AddItem ("Produit")
+    ListBox11.List(0, 1) = "|"
+    ListBox11.List(0, 2) = "Quantité"
+    ListBox11.List(0, 3) = "|"
+    ListBox11.List(0, 4) = "Quantité"
+    ListBox11.List(0, 5) = "|"
+    ListBox11.List(0, 6) = "Volume"
+    
+    ListBox11.ColumnWidths = "10,3cm;0,4cm;2cm;0,4cm;2cm;0,4cm;2cm"
+    
+    ListBox12.Clear
+    ListBox12.AddItem ("Type")
+    
+    
+    
+    Label14.Caption = 3
+    Label23.Caption = 3
+    
+    
+    For i = 1 To ListBox4.ListCount - 1
+        If ListBox4.List(i, 0) <> "" Then
+            ListBox11.AddItem (ListBox1.List(i, 0))
+            ListBox12.AddItem ("")
+            ListBox11.List(ListBox11.ListCount - 1, 1) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 2) = ListBox4.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 3) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 4) = ListBox4.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 5) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 6) = ListBox4.List(i, 1)
+            
+            
+        End If
+    Next
+
+
+
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = False
+        Controls("TextBox" & i).Enabled = False
+        If i <> 4 Then
+            Controls("ToggleButton" & i - 1).Enabled = False
+        End If
+    Next
+
+
+    ListBox1.Enabled = False
+    ListBox4.BackColor = &HC0C0C0
+    TextBox4.BackColor = &HC0C0C0
+    Frame2.Enabled = True
+End If
+
+End Sub
+
+Private Sub ToggleButton4_Click()
+
+ListBox5.Height = 200
+
+If ToggleButton4.Value = False Then
+    ListBox5.Enabled = True
+    TextBox5.Enabled = True
+    ListBox5.BackColor = &H80000005
+    TextBox5.BackColor = &H80000005
+    ListBox1.Enabled = True
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = True
+        Controls("TextBox" & i).Enabled = True
+        Controls("ToggleButton" & i - 1).Enabled = True
+    Next
+    Frame2.Enabled = False
+End If
+
+
+If ToggleButton4.Value = True Then
+
+    ListBox11.Clear
+    ListBox11.ColumnCount = 7
+    ListBox11.AddItem ("Produit")
+    ListBox11.List(0, 1) = "|"
+    ListBox11.List(0, 2) = "Quantité"
+    ListBox11.List(0, 3) = "|"
+    ListBox11.List(0, 4) = "Quantité"
+    ListBox11.List(0, 5) = "|"
+    ListBox11.List(0, 6) = "Volume"
+    
+    ListBox11.ColumnWidths = "10,3cm;0,4cm;2cm;0,4cm;2cm;0,4cm;2cm"
+    
+    ListBox12.Clear
+    ListBox12.AddItem ("Type")
+    
+    
+    
+    Label14.Caption = 4
+    Label23.Caption = 4
+    
+    
+    
+    For i = 1 To ListBox5.ListCount - 1
+        If ListBox5.List(i, 0) <> "" Then
+            ListBox11.AddItem (ListBox1.List(i, 0))
+            ListBox12.AddItem ("")
+            ListBox11.List(ListBox11.ListCount - 1, 1) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 2) = ListBox5.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 3) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 4) = ListBox5.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 5) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 6) = ListBox5.List(i, 1)
+            
+        End If
+    Next
+
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = False
+        Controls("TextBox" & i).Enabled = False
+        If i <> 5 Then
+            Controls("ToggleButton" & i - 1).Enabled = False
+        End If
+    Next
+
+
+    ListBox1.Enabled = False
+    ListBox5.BackColor = &HC0C0C0
+    TextBox5.BackColor = &HC0C0C0
+    Frame2.Enabled = True
+End If
+
+End Sub
+
+Private Sub ToggleButton5_Click()
+
+ListBox6.Height = 200
+
+If ToggleButton5.Value = False Then
+    ListBox6.Enabled = True
+    TextBox6.Enabled = True
+    ListBox6.BackColor = &H80000005
+    TextBox6.BackColor = &H80000005
+    ListBox1.Enabled = True
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = True
+        Controls("TextBox" & i).Enabled = True
+        Controls("ToggleButton" & i - 1).Enabled = True
+    Next
+    Frame2.Enabled = False
+End If
+
+
+If ToggleButton5.Value = True Then
+    
+    
+    ListBox11.Clear
+    ListBox11.ColumnCount = 7
+    ListBox11.AddItem ("Produit")
+    ListBox11.List(0, 1) = "|"
+    ListBox11.List(0, 2) = "Quantité"
+    ListBox11.List(0, 3) = "|"
+    ListBox11.List(0, 4) = "Quantité"
+    ListBox11.List(0, 5) = "|"
+    ListBox11.List(0, 6) = "Volume"
+    
+    ListBox11.ColumnWidths = "10,3cm;0,4cm;2cm;0,4cm;2cm;0,4cm;2cm"
+    
+    ListBox12.Clear
+    ListBox12.AddItem ("Type")
+    
+    
+    
+    Label14.Caption = 5
+    Label23.Caption = 5
+    
+    
+    
+    For i = 1 To ListBox6.ListCount - 1
+        If ListBox6.List(i, 0) <> "" Then
+            ListBox11.AddItem (ListBox1.List(i, 0))
+            ListBox12.AddItem ("")
+            ListBox11.List(ListBox11.ListCount - 1, 1) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 2) = ListBox6.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 3) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 4) = ListBox6.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 5) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 6) = ListBox6.List(i, 1)
+            
+        End If
+    Next
+
+
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = False
+        Controls("TextBox" & i).Enabled = False
+        If i <> 6 Then
+            Controls("ToggleButton" & i - 1).Enabled = False
+        End If
+    Next
+
+
+    ListBox1.Enabled = False
+    ListBox6.BackColor = &HC0C0C0
+    TextBox6.BackColor = &HC0C0C0
+    Frame2.Enabled = True
+End If
+
+End Sub
+
+Private Sub ToggleButton6_Click()
+
+ListBox7.Height = 200
+
+If ToggleButton6.Value = False Then
+    ListBox7.Enabled = True
+    TextBox7.Enabled = True
+    ListBox7.BackColor = &H80000005
+    TextBox7.BackColor = &H80000005
+    ListBox1.Enabled = True
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = True
+        Controls("TextBox" & i).Enabled = True
+        Controls("ToggleButton" & i - 1).Enabled = True
+    Next
+    Frame2.Enabled = False
+End If
+
+
+If ToggleButton6.Value = True Then
+
+    ListBox11.Clear
+    ListBox11.ColumnCount = 7
+    ListBox11.AddItem ("Produit")
+    ListBox11.List(0, 1) = "|"
+    ListBox11.List(0, 2) = "Quantité"
+    ListBox11.List(0, 3) = "|"
+    ListBox11.List(0, 4) = "Quantité"
+    ListBox11.List(0, 5) = "|"
+    ListBox11.List(0, 6) = "Volume"
+    
+    ListBox11.ColumnWidths = "10,3cm;0,4cm;2cm;0,4cm;2cm;0,4cm;2cm"
+    
+    ListBox12.Clear
+    ListBox12.AddItem ("Type")
+    
+    
+    
+    Label14.Caption = 6
+    Label23.Caption = 6
+    
+    
+    
+    For i = 1 To ListBox7.ListCount - 1
+        If ListBox7.List(i, 0) <> "" Then
+            ListBox11.AddItem (ListBox1.List(i, 0))
+            ListBox12.AddItem ("")
+            ListBox11.List(ListBox11.ListCount - 1, 1) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 2) = ListBox7.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 3) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 4) = ListBox7.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 5) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 6) = ListBox7.List(i, 1)
+            
+        End If
+    Next
+
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = False
+        Controls("TextBox" & i).Enabled = False
+        If i <> 7 Then
+            Controls("ToggleButton" & i - 1).Enabled = False
+        End If
+    Next
+
+
+    ListBox1.Enabled = False
+    ListBox7.BackColor = &HC0C0C0
+    TextBox7.BackColor = &HC0C0C0
+    Frame2.Enabled = True
+End If
+
+End Sub
+
+Private Sub ToggleButton7_Click()
+
+ListBox8.Height = 200
+
+If ToggleButton7.Value = False Then
+    ListBox8.Enabled = True
+    TextBox8.Enabled = True
+    ListBox8.BackColor = &H80000005
+    TextBox8.BackColor = &H80000005
+    ListBox1.Enabled = True
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = True
+        Controls("TextBox" & i).Enabled = True
+        Controls("ToggleButton" & i - 1).Enabled = True
+    Next
+    Frame2.Enabled = False
+End If
+
+
+If ToggleButton7.Value = True Then
+    
+    ListBox11.Clear
+    ListBox11.ColumnCount = 7
+    ListBox11.AddItem ("Produit")
+    ListBox11.List(0, 1) = "|"
+    ListBox11.List(0, 2) = "Quantité"
+    ListBox11.List(0, 3) = "|"
+    ListBox11.List(0, 4) = "Quantité"
+    ListBox11.List(0, 5) = "|"
+    ListBox11.List(0, 6) = "Volume"
+    
+    ListBox11.ColumnWidths = "10,3cm;0,4cm;2cm;0,4cm;2cm;0,4cm;2cm"
+    
+    ListBox12.Clear
+    ListBox12.AddItem ("Type")
+    
+    
+    
+    Label14.Caption = 7
+    Label23.Caption = 7
+    
+    
+    
+    For i = 1 To ListBox8.ListCount - 1
+        If ListBox8.List(i, 0) <> "" Then
+            ListBox11.AddItem (ListBox1.List(i, 0))
+            ListBox12.AddItem ("")
+            ListBox11.List(ListBox11.ListCount - 1, 1) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 2) = ListBox8.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 3) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 4) = ListBox8.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 5) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 6) = ListBox8.List(i, 1)
+            
+        End If
+    Next
+
+
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = False
+        Controls("TextBox" & i).Enabled = False
+        If i <> 8 Then
+            Controls("ToggleButton" & i - 1).Enabled = False
+        End If
+    Next
+
+
+    ListBox1.Enabled = False
+    ListBox8.BackColor = &HC0C0C0
+    TextBox8.BackColor = &HC0C0C0
+    Frame2.Enabled = True
+End If
+
+End Sub
+
+Private Sub ToggleButton8_Click()
+
+ListBox9.Height = 200
+
+If ToggleButton8.Value = False Then
+    ListBox9.Enabled = True
+    TextBox9.Enabled = True
+    ListBox9.BackColor = &H80000005
+    TextBox9.BackColor = &H80000005
+    ListBox1.Enabled = True
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = True
+        Controls("TextBox" & i).Enabled = True
+        Controls("ToggleButton" & i - 1).Enabled = True
+    Next
+    Frame2.Enabled = False
+End If
+
+
+If ToggleButton8.Value = True Then
+
+    ListBox11.Clear
+    ListBox11.ColumnCount = 7
+    ListBox11.AddItem ("Produit")
+    ListBox11.List(0, 1) = "|"
+    ListBox11.List(0, 2) = "Quantité"
+    ListBox11.List(0, 3) = "|"
+    ListBox11.List(0, 4) = "Quantité"
+    ListBox11.List(0, 5) = "|"
+    ListBox11.List(0, 6) = "Volume"
+    
+    ListBox11.ColumnWidths = "10,3cm;0,4cm;2cm;0,4cm;2cm;0,4cm;2cm"
+    
+    ListBox12.Clear
+    ListBox12.AddItem ("Type")
+    
+    
+    
+    Label14.Caption = 8
+    Label23.Caption = 8
+    
+    
+    
+    For i = 1 To ListBox9.ListCount - 1
+        If ListBox9.List(i, 0) <> "" Then
+            ListBox11.AddItem (ListBox1.List(i, 0))
+            ListBox12.AddItem ("")
+            ListBox11.List(ListBox11.ListCount - 1, 1) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 2) = ListBox9.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 3) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 4) = ListBox9.List(i, 0)
+            ListBox11.List(ListBox11.ListCount - 1, 5) = "|"
+            ListBox11.List(ListBox11.ListCount - 1, 6) = ListBox9.List(i, 1)
+            
+        End If
+    Next
+
+    For i = 2 To 9
+        Controls("ListBox" & i).Enabled = False
+        Controls("TextBox" & i).Enabled = False
+        If i <> 9 Then
+            Controls("ToggleButton" & i - 1).Enabled = False
+        End If
+    Next
+
+
+    ListBox1.Enabled = False
+    ListBox9.BackColor = &HC0C0C0
+    TextBox9.BackColor = &HC0C0C0
+    Frame2.Enabled = True
+End If
+
+End Sub
+
+Private Sub UserForm_Activate()
+
+
+End Sub
+
+Private Sub UserForm_Click()
+
+End Sub
+
+Private Sub UserForm_Initialize()
+
+UserForm10.Width = 990
+UserForm10.Height = 640
+Frame1.Width = 695
+TextBox2.Width = 80
+
+Label14.Height = 16
+Label14.Width = 16
+
+Label28.Caption = Sheets("Archive commande").Cells(Sheets("Variables programmation").Cells(8, 2), 1)
+Label30.Caption = Sheets("Archive commande").Cells(Sheets("Variables programmation").Cells(8, 2), 3)
+Label32.Caption = Sheets("Archive commande").Cells(Sheets("Variables programmation").Cells(8, 2), 5)
+
+Label21.Caption = Date
+
+For i = 2 To 9
+    
+    Controls("ListBox" & i).Height = 190
+    Controls("ListBox" & i).Width = 80
+    Controls("ListBox" & i).ColumnCount = 3
+    Controls("ListBox" & i).AddItem ("Qte")
+    Controls("ListBox" & i).List(0, 1) = "|"
+    Controls("ListBox" & i).List(0, 2) = "Vlm"
+    
+    Controls("ListBox" & i).ColumnWidths = "1,1cm;0,4cm;1,1cm"
+    
+    Controls("TextBox" & i).Width = 80
+Next
+
+ListBox1.Height = 190
+ListBox2.Left = 590
+
+'TextBox2.BackColor = &HC0FFC0
+'Sheets("Variables programmation").Cells(1, 19) = 2
+
+
+
+For i = 3 To 6
+    Controls("Label" & i).Left = 537 + (i - 2) * 89
+Next
+For i = 7 To 9
+    Controls("Label" & i).Left = 893 + (i - 6) * 91
+Next
+Label10.Left = 1166 + 90
+
+ListBox1.ColumnCount = 9
+ListBox1.AddItem ("Produit")
+ListBox1.List(0, 1) = "|"
+ListBox1.List(0, 2) = "Quantité"
+ListBox1.List(0, 3) = "|"
+ListBox1.List(0, 4) = "Volume"
+ListBox1.List(0, 5) = "|"
+ListBox1.List(0, 6) = "Quantité"
+ListBox1.List(0, 7) = "|"
+ListBox1.List(0, 8) = "Volume"
+
+ListBox1.ColumnWidths = "10,3cm;0,4cm;2cm;0,4cm;1,7cm;0,4cm;2cm;0,4cm;1,7cm"
+
+
+ListBox11.Height = 170
+ListBox11.ColumnCount = 7
+ListBox11.AddItem ("Produit")
+ListBox11.List(0, 1) = "|"
+ListBox11.List(0, 2) = "Quantité"
+ListBox11.List(0, 3) = "|"
+ListBox11.List(0, 4) = "Quantité"
+ListBox11.List(0, 5) = "|"
+ListBox11.List(0, 6) = "Volume"
+
+
+ListBox11.ColumnWidths = "10,3cm;0,4cm;2cm;0,4cm;2cm;0,4cm;2cm"
+
+
+ListBox12.Height = 165
+ListBox12.Width = 45
+ListBox12.ColumnCount = 1
+ListBox12.AddItem ("Sac")
+ListBox12.ColumnWidths = "1,5cm"
+
+ListBox13.Height = 165
+ListBox13.Width = 45
+ListBox13.ColumnCount = 1
+ListBox13.AddItem ("Palette")
+ListBox13.ColumnWidths = "1,5cm"
+
+ListBox14.Height = 165
+ListBox14.Width = 45
+ListBox14.ColumnCount = 1
+ListBox14.AddItem ("Seul")
+ListBox14.ColumnWidths = "1,5cm"
+
+TextBox17.Width = 45
+TextBox18.Width = 45
+TextBox19.Width = 45
+
+
+
+longueur_list1 = Sheets("Informations expédition").Cells(Rows.Count, 8).End(xlUp).Row
+
+
+For i = 7 To longueur_list1
+    If Sheets("Informations expédition").Cells(i, 8) <> "" Then
+        UserForm10.ListBox1.AddItem (Sheets("Informations expédition").Cells(i, 8))
+        UserForm10.ListBox1.List(ListBox1.ListCount - 1, 1) = "|"
+        UserForm10.ListBox1.List(ListBox1.ListCount - 1, 2) = Sheets("Informations expédition").Cells(i, 11)
+        UserForm10.ListBox1.List(ListBox1.ListCount - 1, 3) = "|"
+        UserForm10.ListBox1.List(ListBox1.ListCount - 1, 6) = Sheets("Informations expédition").Cells(i, 11)
+        UserForm10.ListBox1.List(ListBox1.ListCount - 1, 5) = "|"
+        UserForm10.ListBox1.List(ListBox1.ListCount - 1, 7) = "|"
+    End If
+Next
+
+
+For t = 1 To ListBox1.ListCount - 1
+    For i = 2 To 9
+
+
+        Controls("ListBox" & i).AddItem ("")
+        Controls("ListBox" & i).List(Controls("ListBox" & i).ListCount - 1, 1) = "|"
+        Controls("ListBox" & i).List(Controls("ListBox" & i).ListCount - 1, 2) = ""
+
+
+    Next
+Next
+
+ToggleButton1.Left = 590
+
+
+
+
+
+
+End Sub
+
+Private Sub UserForm_MouseMove(ByVal Button As Integer, ByVal Shift As Integer, ByVal X As Single, ByVal Y As Single)
+
+
+
+
+End Sub
